@@ -139,7 +139,8 @@ COOKIES_PATH = ""
 # present)
 DL_LOCATION = "./output"
 # List of Course IDs that should be skipped
-COURSES_TO_SKIP = []
+COURSES_TO_SKIP = [9218, 51425, 51605, 52153, 52257, 52401, 52601, 52794, 53511, 53536, 53637, 53763, 54332, 54333, 54334, 54451, 54709, 54921, 55407, 55686, 56280, 56300, 56316, 56989, 57202, 57782, 57784, 57844, 58104, 58130, 58174, 58181, 58277, 58281, 58596, 58617, 59562, 60025, 60616, 60724, 60775, 60961, 60973, 61014, 61138, 61251, 61596, 61612, 61633, 62259, 62563, 64035]
+COURSES_TO_INCLUDE = [] # [57068]
 
 DATE_TEMPLATE = "%B %d, %Y %I:%M %p"
 
@@ -1302,7 +1303,7 @@ if __name__ == "__main__":
     ]
 
     skip = set(COURSES_TO_SKIP)
-
+    include = set(COURSES_TO_INCLUDE)
 
     if COOKIES_PATH and args.singlefile:
         print("  Downloading course list page")
@@ -1310,7 +1311,7 @@ if __name__ == "__main__":
 
     for courses in courses_list:
         for course in courses:
-            if course.id in skip or not hasattr(course, "name") or not hasattr(course, "term"):
+            if (include and course.id not in include) or course.id in skip or not hasattr(course, "name") or not hasattr(course, "term"):
                 continue
             
             html_pages_saved_in_course = 0
