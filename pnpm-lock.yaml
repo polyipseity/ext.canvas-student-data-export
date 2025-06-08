@@ -1,0 +1,51 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      single-file-cli:
+        specifier: github:gildas-lormeau/single-file-cli
+        version: https://codeload.github.com/gildas-lormeau/single-file-cli/tar.gz/823074cb3f690a53d15a47628a225ce2191f41d9
+
+packages:
+
+  simple-cdp@1.8.5:
+    resolution: {integrity: sha512-bpXoeCk0mwFrr+8C8vVkhCug5h4HO49GI+MZdnyLQcFVKzTlokrimTjEoc69X2Y2n7mtjzDHTriq6B/kgUeUcA==}
+    engines: {bun: '>=1.0', deno: '>=1.4'}
+
+  single-file-cli@https://codeload.github.com/gildas-lormeau/single-file-cli/tar.gz/823074cb3f690a53d15a47628a225ce2191f41d9:
+    resolution: {tarball: https://codeload.github.com/gildas-lormeau/single-file-cli/tar.gz/823074cb3f690a53d15a47628a225ce2191f41d9}
+    version: 2.0.73
+    engines: {bun: '>=1.0', deno: '>=1.4', node: '>=20'}
+    hasBin: true
+
+  ws@8.18.0:
+    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+snapshots:
+
+  simple-cdp@1.8.5: {}
+
+  single-file-cli@https://codeload.github.com/gildas-lormeau/single-file-cli/tar.gz/823074cb3f690a53d15a47628a225ce2191f41d9:
+    dependencies:
+      simple-cdp: 1.8.5
+      ws: 8.18.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  ws@8.18.0: {}
