@@ -4,6 +4,7 @@ import os
 import itertools
 import re
 import string
+import unicodedata
 import argparse
 import sys
 
@@ -11,7 +12,7 @@ import sys
 from bs4 import BeautifulSoup
 from canvasapi import Canvas
 from canvasapi.exceptions import ResourceDoesNotExist, Unauthorized, Forbidden, InvalidAccessToken, CanvasException
-from singlefile import download_page, override_chrome_path
+from singlefile import download_page, override_chrome_path, override_singlefile_timeout
 import dateutil.parser
 import jsonpickle
 import requests
@@ -277,6 +278,11 @@ def makeValidFilename(input_str):
     if(not input_str):
         return input_str
 
+    # Normalize Unicode and whitespace
+    input_str = unicodedata.normalize('NFKC', input_str)
+    input_str = input_str.replace("\u00A0", " ") # NBSP to space
+    input_str = re.sub(r"\s+", " ", input_str)
+
     # Remove invalid characters
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
     input_str = input_str.replace("+"," ") # Canvas default for spaces
@@ -293,6 +299,11 @@ def makeValidFilename(input_str):
     return input_str
 
 def makeValidFolderPath(input_str):
+    # Normalize Unicode and whitespace
+    input_str = unicodedata.normalize('NFKC', input_str)
+    input_str = input_str.replace("\u00A0", " ") # NBSP to space
+    input_str = re.sub(r"\s+", " ", input_str)
+
     # Remove invalid characters
     valid_chars = "-_.()/ %s%s" % (string.ascii_letters, string.digits)
     input_str = input_str.replace("+"," ") # Canvas default for spaces
@@ -839,7 +850,12 @@ def getDiscussionView(discussion_topic):
                         e, "discussion topic reply processing"
                     )
                     CanvasErrorHandler.log_error(error_type, message, verbose=args.verbose)
-                    extraction_stats.error_count += 1
+                    if error_type == "student_limitation":
+                        extraction_stats.student_limitation_warnings += 1
+                    elif error_type == "not_found":
+                        pass  # Already handled by log_error
+                    else:
+                        extraction_stats.error_count += 1
 
                 discussion_view.topic_entries.append(topic_entry_view)
         except Exception as e:
@@ -847,7 +863,12 @@ def getDiscussionView(discussion_topic):
                 e, "discussion topic entry processing"
             )
             CanvasErrorHandler.log_error(error_type, message, verbose=args.verbose)
-            extraction_stats.error_count += 1
+            if error_type == "student_limitation":
+                extraction_stats.student_limitation_warnings += 1
+            elif error_type == "not_found":
+                pass  # Already handled by log_error
+            else:
+                extraction_stats.error_count += 1
         
     # Amount of pages  
     discussion_view.amount_pages = int(topic_entries_counter/50) + 1 # Typically 50 topic entries are stored on a page before it creates another page.
@@ -1236,6 +1257,14 @@ if __name__ == "__main__":
     chrome_path_override = creds.get("CHROME_PATH")
     if chrome_path_override:
         override_chrome_path(chrome_path_override)
+
+    # Optional: Override SingleFile capture timeout (in seconds)
+    singlefile_timeout_override = creds.get("SINGLEFILE_TIMEOUT")
+    if singlefile_timeout_override is not None:
+        try:
+            override_singlefile_timeout(float(singlefile_timeout_override))
+        except (ValueError, TypeError):
+            print(f"Warning: Invalid SINGLEFILE_TIMEOUT value in {args.config}; using default.")
 
     # Update output directory
     DL_LOCATION = args.output
