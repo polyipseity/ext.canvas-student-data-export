@@ -6,7 +6,7 @@ output/
 credentials.yaml
 cookies.txt
 
-# custom {
+# self {
 /export.py.log
 /output
 /output/
