@@ -1,0 +1,18 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "single-file-cli": "2.0.75",
+      },
+    },
+  },
+  "packages": {
+    "simple-cdp": ["simple-cdp@1.10.0", "", {}, "sha512-UXDAaiges1GqNKtBy39po+CD4hXDJxQEDtR1GF9bK2J9MNN0epTo2GpoSmEc8o5ofW8dutpHafBjowEchSNgig=="],
+
+    "single-file-cli": ["single-file-cli@2.0.75", "", { "dependencies": { "simple-cdp": "^1.8.5", "ws": "^8.18.0" }, "bin": { "single-file": "single-file-node.js" } }, "sha512-LA8p/s7sVXkfCXFZ0P7ivDrJ8f1GdgOUcxCPBjwtC1S6bmVakTVai4fCGeujKvUfl/ee8fZQd52DURIGYNtPXQ=="],
+
+    "ws": ["ws@8.21.3", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw=="],
+  }
+}
